@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springkeijiban.mapper.UserMapper">
+	<resultMap id="UserResult" type="springkeijiban.entity.User">
+		<result column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="login_id" property="loginId" />
+		<result column="password" property="password" />
+		<result column="branch_id" property="branchId" />
+		<result column="department_id" property="departmentId" />
+		<result column="is_working" property="isWorking" />
+		<result column="created_at" property="createdDate" />
+		<result column="updated_at" property="updatedDate" />
+	</resultMap>
+
+	<select id="getUser" resultMap="UserResult"
+		parameterType="springkeijiban.mapper.UserMapper">
+		select *
+		from users
+		where login_id = #{loginId} and
+		password = #{password}
+	</select>
+
+	<select id="getSignUp" resultMap="UserResult"
+		parameterType="springkeijiban.mapper.UserMapper">
+		INSERT INTO users
+		(name,login_id,password,branch_id,department_id)
+		VALUES
+		(#{name},#{loginId},#{password},#{branchId},#{departmentId})
+	</select>
+
+	<select id="getAllUsers" resultMap="UserResult"
+		parameterType="springkeijiban.mapper.UserMapper">
+		select * from users ORDER BY branch_id, department_id
+	</select>
+
+	<select id="update" resultMap="UserResult"
+		parameterType="springkeijiban.mapper.UserMapper">
+		UPDATE users SET
+		name = #{name},
+		login_id = #{loginId},
+		<if test="password != ''">
+			password = #{password},
+		</if>
+		branch_id = #{branchId},
+		department_id = #{departmentId}
+		where id = #{id}
+	</select>
+
+	<select id="getEditUser" resultMap="UserResult"
+		parameterType="springkeijiban.mapper.UserMapper">
+		select *
+		from users
+		where id = #{id}
+	</select>
+
+	<select id="getBranchDatas" resultMap="UserResult"
+		parameterType="springkeijiban.mapper.UserMapper">
+		select * from branches
+	</select>
+
+	<select id="getDepartmentDatas" resultMap="UserResult"
+		parameterType="springkeijiban.mapper.UserMapper">
+		select * from departments
+	</select>
+
+	<select id="updateIsWorking" resultMap="UserResult"
+		parameterType="springkeijiban.mapper.UserMapper">
+		UPDATE users SET
+		is_working = #{isWorking}
+		where id = #{id}
+	</select>
+
+	<select id="getLoginUser" resultMap="UserResult"
+		parameterType="springkeijiban.mapper.UserMapper">
+		select *
+		from users
+		where id = #{id}
+	</select>
+
+	<select id="getLoginId" resultMap="UserResult"
+		parameterType="springkeijiban.mapper.UserMapper">
+		select *
+		from users
+		where login_id = #{loginId}
+	</select>
+</mapper>

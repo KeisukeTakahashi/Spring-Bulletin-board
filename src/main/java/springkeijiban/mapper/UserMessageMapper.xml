@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springkeijiban.mapper.UserMessageMapper">
+	<resultMap id="UserMessageResult" type="springkeijiban.entity.UserMessage">
+		<result column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="login_id" property="loginId" />
+		<result column="subject" property="subject" />
+		<result column="category" property="category" />
+		<result column="text" property="message" />
+		<result column="branch_id" property="branchId" />
+		<result column="department_id" property="departmentId" />
+		<result column="user_id" property="userId" />
+		<result column="created_at" property="createdDate" />
+		<result column="updated_at" property="updatedDate" />
+	</resultMap>
+
+	<select id="getMessages" resultMap="UserMessageResult"
+		parameterType="springkeijiban.mapper.UserMessageMapper">
+		select * from users_posts
+		WHERE created_at BETWEEN #{startDay} AND #{endDay}
+        	<foreach collection="categorys" item="category" index="index">
+        		<if test="index == 0">
+                 	AND category LIKE #{category}
+            	</if>
+            	<if test="index != 0">
+            		OR created_at BETWEEN #{startDay} AND #{endDay}
+                 	AND category LIKE #{category}
+            	</if>
+        	</foreach>
+		ORDER BY created_at DESC limit 1000
+	</select>
+
+	<select id="getAllCategorys" resultMap="UserMessageResult"
+		parameterType="springkeijiban.mapper.UserMessageMapper">
+		select distinct category from posts
+	</select>
+</mapper>
